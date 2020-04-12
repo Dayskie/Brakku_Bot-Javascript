@@ -5,6 +5,10 @@ import { errorcode } from './errortype';
 import { tokenKey, PREFIX, version } from './config';
 import { blacklisted } from './blacklist';
 
+let Admin = '698804000476233729';
+let Moderator = '698788635847294981';
+
+
 
 bot.on('ready', () =>{
     console.log("Bot online");
@@ -13,7 +17,7 @@ bot.on('ready', () =>{
 function emote (id) {
     return bot.emojis.resolve(id).toString();
 }
-
+///main commands
 bot.on ('message', message=>{
     let args = message.content.substring(PREFIX.length).split(" ");
 
@@ -43,19 +47,32 @@ bot.on ('message', message=>{
         } else{
             message.channel.send(errorcode.error101) }
     break;
+
+    case '':
+        
+        break;
+
+    ///admin stuff
     case 'kick':
         const user = message.mentions.users.first()
-        if(!message.member.roles.cache.has('698788635847294981')) {
-            message.reply(errorcode.error102)
+        if(!message.member.roles.cache.has(Admin)){
+            if(!message.member.roles.cache.has(Moderator)){
+                message.reply(errorcode.error102)
+            }
         } 
         const member = message.guild.member(user)
         if(member) {
             member.kick("Kicked loser (TEST)").then(() => {
                 message.reply('${user.tag} was kicked!')
+                
             })
-        }else{ message.reply(errorcode.error103)}
-
+            break;
+        }else{ message.reply(errorcode.error103)
+        break;
+        }
     }
+
+
 })
 bot.on('message', message => {
     ///console.log(message.content);

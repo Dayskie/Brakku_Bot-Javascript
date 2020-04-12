@@ -1,0 +1,11 @@
+    bot.on(message, async message => {
+        let foundintext = false;
+        for (var i in blacklisted) {
+            if(message.content.toLowerCase().includes(blacklisted[i].toLowerCase())) foundintext = true;
+        }
+        
+        if (foundintext) {
+            message.delete();
+            message.channel.send ("THATS BLACKLISTED!")
+        }
+    })

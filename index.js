@@ -16,7 +16,6 @@ let Moderator = '698788635847294981';
 
 
 bot.on('guildCreate', (guild) => {
-    
     var ServerID = guild.id
     var serverName = guild.name;
     var new_server = {

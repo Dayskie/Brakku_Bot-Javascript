@@ -20,7 +20,7 @@ bot.on('guildCreate', (guild) => {
     var serverName = guild.name;
     var new_server = {
         [serverName] : ServerID,
-        "Blacklit":[""]
+        "Blacklists":[""]
     }
     ///I OWN MY LIFE TO Forward Doge
 

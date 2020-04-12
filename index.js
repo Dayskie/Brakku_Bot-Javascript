@@ -1,6 +1,12 @@
 const {Client, Attachment} = require('discord.js');
 const bot = new Client();
 
+var jsonQ=require("jsonq");
+var jsonObject = require('./serverBlacklist.json')
+var databaseObject = jsonQ(jsonObject);
+var fs = require('fs');
+
+
 import { errorcode } from './errortype';
 import { tokenKey, PREFIX, version } from './config';
 import { blacklisted } from './blacklist';
@@ -9,6 +15,24 @@ let Admin = '698804000476233729';
 let Moderator = '698788635847294981';
 
 
+bot.on('guildCreate', (guild) => {
+    
+    var ServerID = guild.id
+    var serverName = guild.name;
+    var new_server = {
+        [serverName] : ServerID,
+        "Blacklit":[""]
+    }
+    ///I OWN MY LIFE TO Forward Doge
+
+    databaseObject.find('servers').append(new_server);
+    console.log('joined server');
+    console.log(jsonObject);
+    fs.writeFile('./serverBlacklist.json', JSON.stringify(jsonObject, null, 2), (err) => {
+        if (err) throw err;
+        console.log('Data written to file');
+    });
+})
 
 bot.on('ready', () =>{
     console.log("Bot online");
@@ -22,9 +46,6 @@ bot.on ('message', message=>{
     let args = message.content.substring(PREFIX.length).split(" ");
 
     switch(args[0]) {
-        case "test":
-            message.channel.send('hello, ${member}')
-        break;
         case 'meme':
             var numberofMemes = 2;
             var memeImageNumber = Math.floor (Math.random() * (numberofMemes - 1 + 1)) + 1;
@@ -36,7 +57,12 @@ bot.on ('message', message=>{
         break;
         case 'avatar':
             message.reply(message.author.displayAvatarURL());
-            break;
+        break;
+        case 'id':
+            let serverName = message.guild.name
+            let ServerID = message.guild.id
+            message.reply('You are on ' + serverName + ' here is the server id! ' + ServerID)
+        break;
     case 'info':
         if(args[1] === 'version'){
             message.channel.send("Version " + version);
@@ -88,8 +114,5 @@ bot.on('message', message => {
         }
     }
 });
-
-
-
 
 bot.login(tokenKey);

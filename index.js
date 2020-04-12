@@ -61,7 +61,7 @@ bot.on ('message', message=>{
         case 'id':
             let serverName = message.guild.name
             let ServerID = message.guild.id
-            message.reply('You are on ' + serverName + ' here is the server id! ' + ServerID)
+            message.reply('You are on; ' + serverName + ' here is the server id! ' + ServerID)
         break;
     case 'info':
         if(args[1] === 'version'){

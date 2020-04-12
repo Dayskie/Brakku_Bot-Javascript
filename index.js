@@ -43,12 +43,34 @@ bot.on ('message', message=>{
         } else{
             message.channel.send(errorcode.error101) }
     break;
-    
+    case 'kick':
+        const user = message.mentions.users.first()
+        if(!message.member.roles.cache.has('698788635847294981')) {
+            message.reply(errorcode.error102)
+        } 
+        const member = message.guild.member(user)
+        if(member) {
+            member.kick("Kicked loser (TEST)").then(() => {
+                message.reply('${user.tag} was kicked!')
+            })
+        }else{ message.reply(errorcode.error103)}
 
     }
-
-
 })
+bot.on('message', message => {
+    ///console.log(message.content);
+    let wordArray = message.content.split(" ");
+    ///console.log(wordArray);
+
+    for(var i = 0; i < blacklisted.length; i++) {
+        if(wordArray.includes(blacklisted[i])) {
+            message.delete();
+            message.reply('One of the words you said was blacklisted!'
+            );
+            break;
+        }
+    }
+});
 
 
 

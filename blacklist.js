@@ -1,1 +1,1 @@
-export let blacklisted = [ 'frick' ];
+export let blacklisted = ['frick', 'troll' ];

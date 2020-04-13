@@ -5,8 +5,10 @@
   "main": "index.js",
   "dependencies": {
     "discord.js": "^12.1.1",
+    "dotenv": "^8.2.0",
     "jsong": "0.0.3",
-    "jsonq": "^1.2.0"
+    "jsonq": "^1.2.0",
+    "lowdb": "^1.0.0"
   },
   "devDependencies": {
     "babel-preset-env": "^1.7.0",

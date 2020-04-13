@@ -1,13 +1,22 @@
+//Start using better names for variables as let,var
+//
+//
 const fs = require('fs');
 const {Client, Attachment} = require('discord.js');
 const bot = new Client();
 bot.commands = new Collection();
 
-var jsonQ=require("jsonq");
-var jsonObject = require('./serverBlacklist.json')
-var databaseObject = jsonQ(jsonObject);
+//this for using enverionment variables
+const dotenv = require('dotenv');
 
-import { errorcode } from './errortype';
+//lowDB stuff better than the system that was before
+const low = require('lowdb');
+const FileSync = require('lowdb/adapters/FileSync');
+const adapter = new FileSync('serverBlacklist.json');
+const db = low(adapter);
+
+
+
 import { tokenKey, PREFIX, version } from './config';
 import { blacklisted } from './blacklist';
 import { Collection } from 'discord.js';
@@ -31,19 +40,16 @@ bot.on('ready', () =>{
 bot.on('guildCreate', (guild) => {
     var ServerID = guild.id
     var serverName = guild.name;
-    var new_server = {
-        [serverName] : ServerID,
-        "Blacklists":[""]
-    }
-    ///I OWN MY LIFE TO Forward Doge
 
-    databaseObject.find('servers').append(new_server);
-    console.log('joined server');
-    console.log(jsonObject);
-    fs.writeFile('./serverBlacklist.json', JSON.stringify(jsonObject, null, 2), (err) => {
-        if (err) throw err;
-        console.log('Data written to file');
-    });
+    //This thing is cooler to be serious
+    db.get('servers').push({ [serverName]: ServerID, "Blacklists":[""]}).write();
+    
+
+    ///I OWN MY LIFE TO rflx#5967
+    ///YOU OWN AGAIN YOUR LIFE TO rflx#5967
+  
+    console.log('I joined an server');
+  
 })
 
 
@@ -67,6 +73,7 @@ bot.on ('message', message=>{
 
 })
 bot.on('message', message => {
+<<<<<<< HEAD
     ///console.log(message.content);
     let wordArray = message.content.split(" ");
     ///console.log(wordArray);
@@ -80,9 +87,24 @@ bot.on('message', message => {
             message.reply('One of the words you said was blacklisted!'
             );
             break;
+=======
+     let wordArray = message.content.split(" ");
+ 
+    let currentServerId = message.guild.id.toString();
+    let currentServerName = message.guild.name;
+
+    let foundServer = db.get('servers').find( {[currentServerName] : currentServerId }).value(); // 
+    let serverObj = JSON.parse(JSON.stringify(foundServer)) //Some fancy stuff to fix the JSON object
+
+    let serverBlacklistedWords = serverObj['Blacklists'];
+
+    serverBlacklistedWords.forEach(function(blacklistedWord) {
+        if(wordArray.includes(blacklistedWord)){
+           message.reply("Those kind of words are not welcome here !").then(message.delete().then(message => console.log(`Deleted message from ${message.author.username}`)).catch(console.error)).catch(console.error); // using promises is cooler because you can delete multiple messages at the same time in multiple servers
+>>>>>>> 01fea9d04f0416b692a405e4b8e7f5ce802aea70
         }
-        
-    }
+    });
+
 });
 
-bot.login(tokenKey);
+bot.login(process.env.TOKEN_KEY);

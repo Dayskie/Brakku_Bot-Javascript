@@ -71,9 +71,9 @@ bot.on('message', message => {
     let wordArray = message.content.split(" ");
     ///console.log(wordArray);
     var currentServer = message.guild.id.toString();
-
+    
     var serverblacklist = databaseObject.find(currentServer).find('Blacklists')
-    console.log(serverblacklist.value())
+    console.log(serverblacklist)
     for(var i = 0; i < serverblacklist.length; i++) {
         if(wordArray.includes(serverblacklist[i])) {
             message.delete();

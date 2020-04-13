@@ -55,8 +55,6 @@ bot.on ('message', message=>{
     const args = message.content.substring(PREFIX.length).split(" ");
     const commandName = args.shift().toLowerCase();
 
-
-
     if(!bot.commands.has(commandName)) return
     
     const command = bot.commands.get(commandName)
@@ -72,14 +70,18 @@ bot.on('message', message => {
     ///console.log(message.content);
     let wordArray = message.content.split(" ");
     ///console.log(wordArray);
+    var currentServer = message.guild.id.toString();
 
-    for(var i = 0; i < blacklisted.length; i++) {
-        if(wordArray.includes(blacklisted[i])) {
+    var serverblacklist = databaseObject.find(currentServer).find('Blacklists')
+    console.log(serverblacklist.value())
+    for(var i = 0; i < serverblacklist.length; i++) {
+        if(wordArray.includes(serverblacklist[i])) {
             message.delete();
             message.reply('One of the words you said was blacklisted!'
             );
             break;
         }
+        
     }
 });
 

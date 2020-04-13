@@ -1,6 +1,6 @@
 export var errorcode = {
-    error101 : "Error101! no arg 1 defined!",
+    error101 : "Error101! no arg 0 defined!",
     error102 : "Error 102! You don't have permisiion to use this command!",
     error103 : "Error 103! You have not specified a person you wish to kick!",
-    error104 : "Error 104! "
+    error104 : "Error 104! There was an error executing that command!",
 } 

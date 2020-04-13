@@ -1,18 +1,31 @@
+const fs = require('fs');
 const {Client, Attachment} = require('discord.js');
 const bot = new Client();
+bot.commands = new Collection();
 
 var jsonQ=require("jsonq");
 var jsonObject = require('./serverBlacklist.json')
 var databaseObject = jsonQ(jsonObject);
-var fs = require('fs');
-
 
 import { errorcode } from './errortype';
 import { tokenKey, PREFIX, version } from './config';
 import { blacklisted } from './blacklist';
+import { Collection } from 'discord.js';
 
 let Admin = '698804000476233729';
 let Moderator = '698788635847294981';
+
+const commandFiles = fs.readdirSync('./commands').filter(file => file.endsWith('.js'));
+
+
+for (const file of commandFiles) {
+    const command = require(`./commands/${file}`);
+    bot.commands.set(command.name, command);
+}
+
+bot.on('ready', () =>{
+    console.log("Bot online");
+})
 
 
 bot.on('guildCreate', (guild) => {
@@ -33,70 +46,26 @@ bot.on('guildCreate', (guild) => {
     });
 })
 
-bot.on('ready', () =>{
-    console.log("Bot online");
-})
 
-function emote (id) {
-    return bot.emojis.resolve(id).toString();
-}
+
 ///main commands
 bot.on ('message', message=>{
-    let args = message.content.substring(PREFIX.length).split(" ");
+    if (!message.content.startsWith(PREFIX) || message.author.bot) return;
 
-    switch(args[0]) {
-        case 'meme':
-            var numberofMemes = 2;
-            var memeImageNumber = Math.floor (Math.random() * (numberofMemes - 1 + 1)) + 1;
-            message.channel.send ( {files: ["./memes/" + "meme" + memeImageNumber + ".jpg"]} )
-        break;
-        case 'emote':
-            message.channel.send(emote('698732412221390888'));
+    const args = message.content.substring(PREFIX.length).split(" ");
+    const commandName = args.shift().toLowerCase();
 
-        break;
-        case 'avatar':
-            message.reply(message.author.displayAvatarURL());
-        break;
-        case 'id':
-            let serverName = message.guild.name
-            let ServerID = message.guild.id
-            message.reply('You are on; ' + serverName + ' here is the server id! ' + ServerID)
-        break;
-    case 'info':
-        if(args[1] === 'version'){
-            message.channel.send("Version " + version);
-        }else if (args[1] === 'created'){
-            message.channel.send("Created on the 3/12/2020!")
-        } else if (args[1] === 'github'){
-            message.channel.send("Here's the Github! https://github.com/Brakku/Brakku_Bot") 
-        } else{
-            message.channel.send(errorcode.error101) }
-    break;
 
-    case '':
-        
-        break;
 
-    ///admin stuff
-    case 'kick':
-        const user = message.mentions.users.first()
-        if(!message.member.roles.cache.has(Admin)){
-            if(!message.member.roles.cache.has(Moderator)){
-                message.reply(errorcode.error102)
-            }
-        } 
-        const member = message.guild.member(user)
-        if(member) {
-            member.kick("Kicked loser (TEST)").then(() => {
-                message.reply('${user.tag} was kicked!')
-                
-            })
-            break;
-        }else{ message.reply(errorcode.error103)
-        break;
-        }
+    if(!bot.commands.has(commandName)) return
+    
+    const command = bot.commands.get(commandName)
+
+    try {
+        command.execute(message, args, version);
+    } catch (error) {
+        message.reply(errorcode.error104);
     }
-
 
 })
 bot.on('message', message => {

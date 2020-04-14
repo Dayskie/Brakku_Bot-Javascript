@@ -11,7 +11,7 @@ module.exports = {
             message.reply('You are on; ' + serverName + ' here is the server id! ' + ServerID)
         } 
         if (member) {
-            message.reply('id is' + member.id)
+            message.reply(`${member.username}'s id is` + member.id)
         } 
 	},
 };

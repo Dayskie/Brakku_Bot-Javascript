@@ -3,6 +3,7 @@
 //
 const fs = require('fs');
 const {Client, Attachment} = require('discord.js');
+import { Collection } from 'discord.js';
 const bot = new Client();
 bot.commands = new Collection();
 
@@ -17,9 +18,9 @@ const db = low(adapter);
 
 
 
-import { PREFIX, version } from './config';
+import { tokenKey, PREFIX, version } from './config';
 import { blacklisted } from './blacklist';
-import { Collection } from 'discord.js';
+import { errorcode } from './errortype';
 
 let Admin = '698804000476233729';
 let Moderator = '698788635847294981';
@@ -32,7 +33,7 @@ for (const file of commandFiles) {
     bot.commands.set(command.name, command);
 }
 
-bot.on('ready', () =>{
+bot.once('ready', () =>{
     console.log("Bot online");
 })
 
@@ -58,20 +59,26 @@ bot.on('guildCreate', (guild) => {
 bot.on ('message', message=>{
     if (!message.content.startsWith(PREFIX) || message.author.bot) return;
 
-    const args = message.content.substring(PREFIX.length).split(" ");
+    const args = message.content.slice(PREFIX.length).split(/ +/);
     const commandName = args.shift().toLowerCase();
 
-    if(!bot.commands.has(commandName)) return
-    
     const command = bot.commands.get(commandName)
-
+        || bot.commands.find(cmd => cmd.aliases && cmd.aliases.includes(commandName));
+    
+    if (!command) return;
+    
     try {
         command.execute(message, args, version);
-    } catch (error) {
+    } catch(error) {
+        console.error(error);
         message.reply(errorcode.error104);
-    }
+    };
+    
+
+    
 
 })
+
 bot.on('message', message => {
      let wordArray = message.content.split(" ");
  
@@ -90,5 +97,5 @@ bot.on('message', message => {
     });
 
 });
-
-bot.login(process.env.TOKEN_KEY);
+bot.login('Njk4NDEyMzE2ODkwMzY2MDI0.XpUE2A.3eHtG7RCoZf5QPdsSV-pXyfGkdI')
+///bot.login(process.env.TOKEN_KEY);

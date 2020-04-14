@@ -97,5 +97,4 @@ bot.on('message', message => {
     });
 
 });
-bot.login('Njk4NDEyMzE2ODkwMzY2MDI0.XpUE2A.3eHtG7RCoZf5QPdsSV-pXyfGkdI')
-///bot.login(process.env.TOKEN_KEY);
+bot.login(process.env.TOKEN_KEY);

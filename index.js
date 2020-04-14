@@ -17,7 +17,7 @@ const db = low(adapter);
 
 
 
-import { tokenKey, PREFIX, version } from './config';
+import { PREFIX, version } from './config';
 import { blacklisted } from './blacklist';
 import { Collection } from 'discord.js';
 
@@ -48,7 +48,7 @@ bot.on('guildCreate', (guild) => {
     ///I OWN MY LIFE TO rflx#5967
     ///YOU OWN AGAIN YOUR LIFE TO rflx#5967
   
-    console.log('I joined an server');
+    console.log('I joined a server');
   
 })
 
@@ -73,21 +73,6 @@ bot.on ('message', message=>{
 
 })
 bot.on('message', message => {
-<<<<<<< HEAD
-    ///console.log(message.content);
-    let wordArray = message.content.split(" ");
-    ///console.log(wordArray);
-    var currentServer = message.guild.id.toString();
-    
-    var serverblacklist = databaseObject.find(currentServer).find('Blacklists')
-    console.log(serverblacklist)
-    for(var i = 0; i < serverblacklist.length; i++) {
-        if(wordArray.includes(serverblacklist[i])) {
-            message.delete();
-            message.reply('One of the words you said was blacklisted!'
-            );
-            break;
-=======
      let wordArray = message.content.split(" ");
  
     let currentServerId = message.guild.id.toString();
@@ -101,7 +86,6 @@ bot.on('message', message => {
     serverBlacklistedWords.forEach(function(blacklistedWord) {
         if(wordArray.includes(blacklistedWord)){
            message.reply("Those kind of words are not welcome here !").then(message.delete().then(message => console.log(`Deleted message from ${message.author.username}`)).catch(console.error)).catch(console.error); // using promises is cooler because you can delete multiple messages at the same time in multiple servers
->>>>>>> 01fea9d04f0416b692a405e4b8e7f5ce802aea70
         }
     });
 

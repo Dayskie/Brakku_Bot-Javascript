@@ -1,24 +1,18 @@
 {
   "servers": [
-    {
-      "Brakku_Development": "698412882722947073",
-      "Blacklists": [
-        "frickdamn"
-      ]
-    },
-    {},
-    {
-      "trer": "580381643894816808",
-      "Blacklists": [
-        ""
-      ]
-    },
+
     {
       "testsecrect": "580381643894816808",
       "Blacklists": [
         "idiot",
         "suckdick",
         "retrd"
+      ]
+    },
+    {
+      "Brakku_Development": "698412882722947073",
+      "Blacklists": [
+        "fuck", "shit"
       ]
     }
   ]
